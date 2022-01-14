@@ -35,6 +35,19 @@ namespace TripServiceKata.Tests
 
             Assert.Empty(tripsExpected);
         }
+
+        [Fact]
+        public void user_have_three_friends_and_one_trip()
+        {
+            var user = new User();
+            user.AddFriend(new User());
+            user.AddFriend(new User());
+            user.AddFriend(friend);
+
+            var tripsExpected = tripService.GetTripsByUser(user);
+
+            Assert.Single(tripsExpected);
+        }
     }
 
     internal class UserSessionServiceMock : IUserSessionService
