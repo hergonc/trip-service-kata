@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TripServiceKata.Entity;
 using Xunit;
 
@@ -7,25 +6,40 @@ namespace TripServiceKata.Tests
 {
     public class TripServiceShould
     {
+        private readonly User friend;
+        private readonly TripService tripService;
+
+        public TripServiceShould()
+        {
+            friend = new User();
+            var userSessionService = new UserSessionServiceMock(friend);
+            var userTripsService = new UserTripServiceMock();
+            tripService = new TripService(userSessionService, userTripsService);
+        }
 
         [Fact]
         public void user_have_one_trip()
         {
-            var friend = new User();
-            var userSessionService = new UserSessionServiceMock(friend);
-            var userTripsService = new UserTripServiceMock();
-            var tripService = new TripService(userSessionService, userTripsService);
             var user = new User();
             user.AddFriend(friend);
+
             var tripsExpected = tripService.GetTripsByUser(user);
 
             Assert.Single(tripsExpected);
         }
+
+        [Fact]
+        public void user_have_not_trip()
+        {
+            var tripsExpected = tripService.GetTripsByUser(new User());
+
+            Assert.Empty(tripsExpected);
+        }
     }
 
-    class UserSessionServiceMock : IUserSessionService
+    internal class UserSessionServiceMock : IUserSessionService
     {
-        private User user;
+        private readonly User user;
 
         public UserSessionServiceMock(User user)
         {
@@ -38,7 +52,7 @@ namespace TripServiceKata.Tests
         }
     }
 
-    class UserTripServiceMock : IUserTripsService
+    internal class UserTripServiceMock : IUserTripsService
     {
         public List<Trip> FindTripsByUser(User user)
         {
