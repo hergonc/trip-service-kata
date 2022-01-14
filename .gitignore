@@ -68,3 +68,9 @@ xcuserdata
 *.xccheckout
 *.moved-aside
 *.xcuserstate
+*.v1
+*.testlog
+*.v2
+*.manifest
+*.db
+*.sqlite
